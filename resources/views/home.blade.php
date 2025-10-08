@@ -56,9 +56,22 @@
                 </tbody>
             </table>
         </div>
+@if ($pesan)
+    <div class="bg-purple-100 border-l-4 border-purple-500 text-purple-800 p-4 rounded-lg mt-6 text-left">
+        <p><strong>Pesan dari:</strong> {{ $pesan['nama'] }}</p>
+        <p class="mt-1 italic">"{{ $pesan['pesan'] }}"</p>
+    </div>
+@endif
+
 
         <!-- Tombol -->
-        <div class="pt-4">
+        <div class="pt-6 flex flex-col md:flex-row items-center justify-center gap-4">
+            <a href="/form"
+               class="inline-block px-8 py-4 bg-purple-600 text-white font-bold text-lg rounded-full 
+                      hover:bg-purple-700 transition duration-300 shadow-lg transform hover:scale-105">
+                <i class="fas fa-comment-dots mr-2"></i> Tambah Pesan
+            </a>
+
             <a href="/menu" 
                class="inline-block px-8 py-4 bg-white text-purple-600 font-bold text-lg rounded-full 
                       hover:bg-purple-100 hover:text-purple-700 transition duration-300 shadow-lg transform hover:scale-105">
