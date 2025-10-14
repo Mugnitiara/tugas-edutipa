@@ -15,7 +15,14 @@
             <p class="text-blue-100">Temukan film favoritmu dan kelola datanya</p>
         </div>
 
-        <!-- Tombol Tambah -->
+        <!-- Alert Sukses -->
+        @if (session('success'))
+            <div class="bg-green-100 text-green-800 p-3 m-4 rounded-md text-center">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Tombol Tambah & Search -->
         <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
             <a href="{{ route('movies.create') }}" 
                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
@@ -37,29 +44,39 @@
                     </tr>
                 </thead>
                 <tbody id="moviesBody" class="bg-white divide-y divide-gray-200">
-                    @foreach ($movies as $movie)
+                    @forelse ($movies as $movie)
                         <tr class="hover:bg-gray-50 transition duration-150" 
                             data-judul="{{ strtolower($movie->judul) }}" 
                             data-genre="{{ strtolower($movie->genre) }}">
-                            <td class="px-6 py-4">{{ $movie->judul }}</td>
+                            <td class="px-6 py-4 font-semibold text-gray-800">{{ $movie->judul }}</td>
                             <td class="px-6 py-4">{{ $movie->genre }}</td>
                             <td class="px-6 py-4">{{ $movie->rating }}/10</td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="{{ route('movies.edit', $movie->id) }}" 
-                                   class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md shadow">
-                                   <i class="fas fa-edit"></i>
+                            <td class="px-6 py-4 text-center flex justify-center gap-2">
+                                <!-- Tombol Show -->
+                                <a href="{{ route('movies.show', $movie->id) }}" 
+                                   class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow" 
+                                   title="Lihat Detail">
+                                   <i class="fas fa-eye"></i>
                                 </a>
+
+                                <!-- Tombol Delete -->
                                 <form action="{{ route('movies.destroy', $movie->id) }}" method="POST" class="inline" 
                                       onsubmit="return confirm('Yakin ingin menghapus film ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow">
+                                    <button type="submit" 
+                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow" 
+                                            title="Hapus Film">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">Belum ada film yang ditambahkan.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -70,8 +87,8 @@
         </div>
     </div>
 
+    <!-- Script Search -->
     <script>
-        // Filter pencarian
         const searchInput = document.getElementById('searchInput');
         const rows = document.querySelectorAll('#moviesBody tr');
         searchInput.addEventListener('input', function() {

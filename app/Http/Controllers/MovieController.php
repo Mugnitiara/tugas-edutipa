@@ -2,49 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Movie;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    // Menampilkan semua film di movie.blade.php
+    // Tampilkan semua film
     public function index()
     {
         $movies = Movie::all();
         return view('movie', compact('movies'));
     }
 
-    // Menampilkan form tambah film
+    // Tampilkan form tambah
     public function create()
     {
         return view('movie_create');
     }
 
-    // Menyimpan data film baru
+    // Simpan data baru
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'judul' => 'required|string|max:255',
             'genre' => 'required|string|max:100',
             'rating' => 'required|numeric|min:0|max:10',
         ]);
 
-        Movie::create($validated);
+        Movie::create($request->all());
 
-        // Setelah tambah film, langsung kembali ke movie.blade.php dengan data terbaru
-        return view('movie', [
-            'movies' => Movie::all()
-        ])->with('success', 'Film berhasil ditambahkan!');
+        return redirect()->route('movies.index')->with('success', 'Film berhasil ditambahkan!');
     }
 
-    // Menampilkan form edit film
+    // Tampilkan detail film
+    public function show($id)
+    {
+        $movie = Movie::findOrFail($id);
+        return view('movie_show', compact('movie'));
+    }
+
+    // Tampilkan form edit
     public function edit($id)
     {
         $movie = Movie::findOrFail($id);
         return view('movie_edit', compact('movie'));
     }
 
-    // Menyimpan perubahan film
+    // Update data film
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -59,7 +63,7 @@ class MovieController extends Controller
         return redirect()->route('movies.index')->with('success', 'Film berhasil diperbarui!');
     }
 
-    // Menghapus film
+    // Hapus data film
     public function destroy($id)
     {
         $movie = Movie::findOrFail($id);
