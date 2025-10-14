@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 
-// Halaman daftar film
-Route::get('/movie', [MovieController::class, 'index'])->name('movie.index');
+// CRUD Movie
+Route::resource('movies', MovieController::class);
 
 // Halaman utama
 Route::get('/home', [HomeController::class, 'index'])->name('home');

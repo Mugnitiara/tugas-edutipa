@@ -1,24 +1,20 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Movie extends Model
 {
-    public function up(): void
-    {
-        Schema::create('movies', function (Blueprint $table) {
-            $table->id();
-            $table->string('judul', 100);
-            $table->string('genre', 50);
-            $table->float('rating')->nullable();
-            $table->timestamps();
-        });
-    }
+    use HasFactory;
 
-    public function down(): void
-    {
-        Schema::dropIfExists('movies');
-    }
-};
+  
+    protected $table = 'movies';
+
+    protected $fillable = [
+        'judul',
+        'genre',
+        'rating',
+    ];
+}
